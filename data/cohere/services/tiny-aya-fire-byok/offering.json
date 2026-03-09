@@ -1,21 +1,21 @@
 {
   "currency": "USD",
-  "description": "C4Ai Aya Vision 32B language model",
+  "description": "Tiny Aya Fire language model",
   "details": {
     "object": "model",
     "owned_by": "cohere"
   },
-  "display_name": "C4Ai Aya Vision 32B",
-  "name": "c4ai-aya-vision-32b",
+  "display_name": "Tiny Aya Fire",
+  "name": "tiny-aya-fire",
   "schema": "offering_v1",
-  "service_type": "vision_language_model",
-  "status": "deprecated",
+  "service_type": "llm",
+  "status": "ready",
   "tags": [
     "ai",
     "gateway",
     "byok"
   ],
-  "time_created": "2026-01-26T01:30:44.498Z",
+  "time_created": "2026-03-09T17:27:52.554899Z",
   "upstream_access_interfaces": {
     "Cohere API": {
       "access_method": "http",
