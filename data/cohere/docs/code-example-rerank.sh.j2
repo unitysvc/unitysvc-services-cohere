@@ -4,7 +4,7 @@ curl --request POST \
   --header 'content-type: application/json' \
   --header "Authorization: bearer $UNITYSVC_API_KEY" \
   --data '{
-    "model": "{{offering.name}}",
+    "model": "${MODEL:-{{offering.name}}}",
     "query": "What is the capital of the United States?",
     "top_n": 3,
     "documents": ["Carson City is the capital city of the American state of Nevada.",

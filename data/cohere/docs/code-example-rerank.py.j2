@@ -7,7 +7,7 @@ UNITYSVC_API_KEY = os.getenv("UNITYSVC_API_KEY")
 url = "https://api.cohere.com/v2/rerank"
 
 payload = {
-    "model": "{{offering.name}}",
+    "model": os.environ.get("MODEL", "{{offering.name}}"),
     "query": "What is the capital of the United States?",
     "top_n": 3,
     "documents": [
