@@ -23,7 +23,7 @@
     "type": "one_million_tokens"
   },
   "schema": "offering_v1",
-  "service_type": "rerank",
+  "service_type": "embedding",
   "status": "ready",
   "tags": [
     "ai",
