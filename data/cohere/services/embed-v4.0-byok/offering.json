@@ -5,11 +5,15 @@
   "currency": "USD",
   "description": "Embed V4.0 language model",
   "details": {
-    "contextLength": 128000,
+    "context_length": 128000,
     "litellm_provider": "cohere",
     "max_input_tokens": 128000,
     "max_tokens": 128000,
-    "mode": "embedding"
+    "metadata_sources": {
+      "context_length": "litellm"
+    },
+    "mode": "embedding",
+    "parameter_count": null
   },
   "display_name": "Embed V4.0",
   "name": "embed-v4.0",
