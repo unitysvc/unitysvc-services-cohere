@@ -5,11 +5,15 @@
   "currency": "USD",
   "description": "Embed English Light V3.0 Image language model",
   "details": {
-    "contextLength": 1024,
+    "context_length": 1024,
     "litellm_provider": "cohere",
     "max_input_tokens": 1024,
     "max_tokens": 1024,
-    "mode": "embedding"
+    "metadata_sources": {
+      "context_length": "litellm"
+    },
+    "mode": "embedding",
+    "parameter_count": null
   },
   "display_name": "Embed English Light V3.0 Image",
   "name": "embed-english-light-v3.0-image",
