@@ -2,7 +2,10 @@
   "currency": "USD",
   "documents": {
     "Connectivity test": {
-      "$doc_preset": "llm_connectivity"
+      "$doc_preset": {
+        "name": "llm_connectivity",
+        "version_prefix": "/compatibility/v1"
+      }
     },
     "Default request body": {
       "$doc_preset": "llm_request_template"
@@ -11,13 +14,25 @@
       "$doc_preset": "llm_description"
     },
     "JavaScript code example": {
-      "$doc_preset": "llm_code_example_javascript"
+      "$doc_preset": {
+        "name": "llm_code_example_javascript",
+        "version_prefix": "/compatibility/v1"
+      }
     },
-    "Python code example": {
-      "$doc_preset": "llm_code_example_openai"
+    "Python code example (Cohere SDK)": {
+      "$doc_preset": "llm_code_example_cohere"
+    },
+    "Python code example (OpenAI SDK)": {
+      "$doc_preset": {
+        "name": "llm_code_example_openai",
+        "version_prefix": "/compatibility/v1"
+      }
     },
     "cURL code example": {
-      "$doc_preset": "llm_code_example_shell"
+      "$doc_preset": {
+        "name": "llm_code_example_shell",
+        "version_prefix": "/compatibility/v1"
+      }
     }
   },
   "list_price": {
