@@ -15,21 +15,125 @@
   "documents": {
     "How to use this model": {
       "$doc_preset": "llm_description"
-    },
+    }
+{#- Transcription models hit Cohere's compat-layer ``/audio/transcriptions``
+    surface, not ``/chat/completions``.  Embedding models hit ``/embeddings``.
+    Dispatch by service_type / is_transcription so each gets the
+    correct-shape preset; sending a chat payload to a transcription model
+    returns 400 from upstream. -#}
+{%- if is_transcription %},
     "Python code example": {
-      "$doc_preset": "llm_code_example_openai"
+      "$doc_preset": {
+        "name": "llm_code_example_transcription_requests",
+        "version_prefix": "/compatibility/v1"
+      }
     },
     "JavaScript code example": {
-      "$doc_preset": "llm_code_example_javascript"
+      "$doc_preset": {
+        "name": "llm_code_example_transcription_javascript",
+        "version_prefix": "/compatibility/v1"
+      }
     },
     "cURL code example": {
-      "$doc_preset": "llm_code_example_shell"
+      "$doc_preset": {
+        "name": "llm_code_example_transcription_shell",
+        "version_prefix": "/compatibility/v1"
+      }
     },
     "Connectivity test": {
-      "$doc_preset": "llm_connectivity"
+      "$doc_preset": {
+        "name": "llm_connectivity_transcription",
+        "version_prefix": "/compatibility/v1"
+      }
+    }
+{%- elif is_image_embedding %},
+{#- Image-embedding models hit Cohere's NATIVE ``/v2/embed`` with
+    ``input_type=image`` — the OpenAI-compat ``/embeddings`` rejects them
+    ("does not support text embeddings").  The ``llm_code_example_embed_image_*``
+    presets in unitysvc-data already use the Cohere-native shape
+    (``images``, ``input_type``, ``embedding_types``); we just point
+    ``version_prefix`` at ``/v2``.  No matching connectivity_test preset
+    yet — the cURL code example doubles as the smoke probe via inline. -#}
+    "Python code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_embed_image_requests",
+        "version_prefix": "/v2"
+      }
+    },
+    "JavaScript code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_embed_image_javascript",
+        "version_prefix": "/v2"
+      }
+    },
+    "cURL code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_embed_image_shell",
+        "version_prefix": "/v2"
+      }
+    },
+    "Connectivity test": {
+      "$doc_preset": {
+        "name": "llm_connectivity_embed_image",
+        "version_prefix": "/v2"
+      }
+    }
+{%- elif service_type == "embedding" %},
+    "Python code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_embed_requests",
+        "version_prefix": "/compatibility/v1"
+      }
+    },
+    "JavaScript code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_embed_javascript",
+        "version_prefix": "/compatibility/v1"
+      }
+    },
+    "cURL code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_embed_shell",
+        "version_prefix": "/compatibility/v1"
+      }
+    },
+    "Connectivity test": {
+      "$doc_preset": {
+        "name": "llm_connectivity_embed",
+        "version_prefix": "/compatibility/v1"
+      }
+    }
+{%- else %},
+    "Python code example (OpenAI SDK)": {
+      "$doc_preset": {
+        "name": "llm_code_example_openai",
+        "version_prefix": "/compatibility/v1"
+      }
+    },
+    "Python code example (Cohere SDK)": {
+      "$doc_preset": "llm_code_example_cohere"
+    },
+    "JavaScript code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_javascript",
+        "version_prefix": "/compatibility/v1"
+      }
+    },
+    "cURL code example": {
+      "$doc_preset": {
+        "name": "llm_code_example_shell",
+        "version_prefix": "/compatibility/v1"
+      }
+    },
+    "Connectivity test": {
+      "$doc_preset": {
+        "name": "llm_connectivity",
+        "version_prefix": "/compatibility/v1"
+      }
     },
     "Default request body": {
       "$doc_preset": "llm_request_template"
     }
+{%- endif %}
   }
 }
