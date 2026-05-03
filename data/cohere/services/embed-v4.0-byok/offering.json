@@ -3,7 +3,7 @@
     "embedding"
   ],
   "currency": "USD",
-  "description": "Embed V4.0 language model",
+  "description": "Embed V4.0 embedding model",
   "details": {
     "context_length": 128000,
     "litellm_provider": "cohere",

@@ -69,9 +69,43 @@ class ModelSource:
                 yield template_vars
                 print("  OK")
 
-    def _build_template_vars(self, model_id: str, model_info: dict) -> dict:
+    # Cohere advertises ``embed-*-image`` aliases (e.g.
+    # ``embed-english-light-v3.0-image``) in its /v1/models listing but
+    # the dated model behind them rejects both ``/embeddings`` text
+    # input ("does not support text embeddings") and ``/v2/embed`` image
+    # input ("does not support image embeddings").  Per Cohere's own
+    # docs the canonical ``embed-*-v3.0`` and ``embed-v4.0`` models
+    # accept both text and image input via ``input_type``, so the
+    # ``-image`` aliases are redundant *and* broken — drop them.
+    # Re-enable per-model if Cohere ever fixes this.
+    _BROKEN_MODELS = frozenset({
+        "embed-english-v3.0-image",
+        "embed-english-light-v3.0-image",
+        "embed-multilingual-v3.0-image",
+        "embed-multilingual-light-v3.0-image",
+    })
+
+    def _build_template_vars(self, model_id: str, model_info: dict) -> dict | None:
         """Build template variables for a model."""
+        if model_id in self._BROKEN_MODELS:
+            print(f"  Skipped: {model_id} (deprecated alias; Cohere returns 400 on both /embeddings and /v2/embed)")
+            return None
+
         service_type = self._determine_service_type(model_id)
+        model_lower = model_id.lower()
+        # Audio-transcription detection.  The platform schema enum doesn't
+        # have a transcription service_type today, so transcribe models
+        # ride the ``llm`` slot and the listing template dispatches on
+        # this flag.  Same pattern as Nebius's ``is_vision``.
+        is_transcription = "transcribe" in model_lower or "whisper" in model_lower
+        # Image-embedding detection.  ``embed-*-image`` models accept
+        # image inputs and must hit Cohere's native ``/v2/embed``
+        # endpoint with ``input_type=image`` — the OpenAI-compat
+        # ``/embeddings`` rejects them ("does not support text
+        # embeddings").
+        is_image_embedding = (
+            service_type == "embedding" and "image" in model_lower
+        )
         display_name = model_id.replace("-", " ").replace("_", " ").title()
 
         # Build details from LiteLLM data and model info
@@ -141,6 +175,17 @@ class ModelSource:
 
         capabilities = self._derive_capabilities(model_id, service_type)
 
+        # Description suffix tracks the actual model nature so a
+        # transcription model isn't described as "language model".
+        if is_transcription:
+            description_suffix = "audio transcription model"
+        elif is_image_embedding:
+            description_suffix = "image embedding model"
+        elif service_type == "embedding":
+            description_suffix = "embedding model"
+        else:
+            description_suffix = "language model"
+
         return {
             # Directory name uses -byok suffix (used by populate_from_iterator)
             "name": f"{model_id}-byok",
@@ -148,9 +193,11 @@ class ModelSource:
             "offering_name": model_id,
             # Offering fields
             "display_name": display_name,
-            "description": f"{display_name} language model",
+            "description": f"{display_name} {description_suffix}",
             "service_type": service_type,
             "capabilities": capabilities,
+            "is_transcription": is_transcription,
+            "is_image_embedding": is_image_embedding,
             "status": "ready",
             "details": details,
             "payout_price": pricing,

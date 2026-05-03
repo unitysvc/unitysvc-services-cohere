@@ -3,7 +3,7 @@
     "embedding"
   ],
   "currency": "USD",
-  "description": "Embed English Light V3.0 language model",
+  "description": "Embed English Light V3.0 embedding model",
   "details": {
     "context_length": 1024,
     "litellm_provider": "cohere",

@@ -4,7 +4,7 @@
     "text-generation"
   ],
   "currency": "USD",
-  "description": "Cohere Transcribe 03 2026 language model",
+  "description": "Cohere Transcribe 03 2026 audio transcription model",
   "details": {
     "context_length": null,
     "parameter_count": null
